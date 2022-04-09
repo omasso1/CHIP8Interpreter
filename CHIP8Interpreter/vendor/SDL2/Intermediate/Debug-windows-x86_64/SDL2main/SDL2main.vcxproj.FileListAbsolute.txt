@@ -1,0 +1,2 @@
+E:\VisualStudio\CHIP8Interpreter\CHIP8Interpreter\vendor\SDL2\Binaries\Debug-windows-x86_64\SDL2main.pdb
+E:\VisualStudio\CHIP8Interpreter\CHIP8Interpreter\vendor\SDL2\Intermediate\Debug-windows-x86_64\SDL2main\SDL2main.pdb
