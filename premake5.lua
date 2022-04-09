@@ -11,3 +11,8 @@ workspace "CHIP8Interpreter"
 
 
     include "CHIP8Interpreter"
+    
+group "Dependencies"
+    include "CHIP8Interpreter/vendor/SDL2/SDL2.lua"
+    include "CHIP8Interpreter/vendor/SDL2/SDL2main.lua"
+group ""
