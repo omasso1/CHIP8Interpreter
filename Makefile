@@ -10,19 +10,25 @@ endif
 
 ifeq ($(config),release)
   CHIP8Interpreter_config = release
+  SDL2_config = release
+  SDL2main_config = release
 
 else ifeq ($(config),debug)
   CHIP8Interpreter_config = debug
+  SDL2_config = debug
+  SDL2main_config = debug
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := CHIP8Interpreter
+PROJECTS := CHIP8Interpreter SDL2 SDL2main
 
-.PHONY: all clean help $(PROJECTS) 
+.PHONY: all clean help $(PROJECTS) Dependencies
 
 all: $(PROJECTS)
+
+Dependencies: SDL2 SDL2main
 
 CHIP8Interpreter:
 ifneq (,$(CHIP8Interpreter_config))
@@ -30,8 +36,22 @@ ifneq (,$(CHIP8Interpreter_config))
 	@${MAKE} --no-print-directory -C CHIP8Interpreter -f Makefile config=$(CHIP8Interpreter_config)
 endif
 
+SDL2:
+ifneq (,$(SDL2_config))
+	@echo "==== Building SDL2 ($(SDL2_config)) ===="
+	@${MAKE} --no-print-directory -C CHIP8Interpreter/vendor/SDL2/Intermediate/ProjectFiles/gmake2 -f SDL2.make config=$(SDL2_config)
+endif
+
+SDL2main:
+ifneq (,$(SDL2main_config))
+	@echo "==== Building SDL2main ($(SDL2main_config)) ===="
+	@${MAKE} --no-print-directory -C CHIP8Interpreter/vendor/SDL2/Intermediate/ProjectFiles/gmake2 -f SDL2main.make config=$(SDL2main_config)
+endif
+
 clean:
 	@${MAKE} --no-print-directory -C CHIP8Interpreter -f Makefile clean
+	@${MAKE} --no-print-directory -C CHIP8Interpreter/vendor/SDL2/Intermediate/ProjectFiles/gmake2 -f SDL2.make clean
+	@${MAKE} --no-print-directory -C CHIP8Interpreter/vendor/SDL2/Intermediate/ProjectFiles/gmake2 -f SDL2main.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -44,5 +64,7 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   CHIP8Interpreter"
+	@echo "   SDL2"
+	@echo "   SDL2main"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

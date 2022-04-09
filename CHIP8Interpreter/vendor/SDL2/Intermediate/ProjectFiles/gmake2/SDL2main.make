@@ -19,17 +19,13 @@ endif
 # #############################################
 
 RESCOMP = windres
-DEFINES += -D_CRT_SECURE_NO_WARNINGS
-INCLUDES += -Isrc -Ivendor/SDL2/include
+INCLUDES += -I../../../include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LIBS += -lSDL2
+LIBS +=
 LDDEPS +=
-ALL_LDFLAGS += $(LDFLAGS) -Lvendor/SDL2/Binaries/Debug-windows-x86_64 -L/usr/lib64 -m64 -s
-LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
+LINKCMD = $(AR) -rcs "$@" $(OBJECTS)
 define PREBUILDCMDS
 endef
 define PRELINKCMDS
@@ -38,14 +34,22 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),release)
-TARGETDIR = bin/Release-windows-x86_64/CHIP8Interpreter
-TARGET = $(TARGETDIR)/CHIP8Interpreter.exe
-OBJDIR = bin/intRelease-windows-x86_64/CHIP8Interpreter
+TARGETDIR = ../../../Binaries/Release-windows-x86_64
+TARGET = $(TARGETDIR)/SDL2main.lib
+OBJDIR = ../../Release-windows-x86_64/SDL2main
+DEFINES += -D_WINDOWS -DWIN32 -DNDEBUG
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O3 -msse
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O3 -msse -fno-stack-protector
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 else ifeq ($(config),debug)
-TARGETDIR = bin/Debug-windows-x86_64/CHIP8Interpreter
-TARGET = $(TARGETDIR)/CHIP8Interpreter.exe
-OBJDIR = bin/intDebug-windows-x86_64/CHIP8Interpreter
+TARGETDIR = ../../../Binaries/Debug-windows-x86_64
+TARGET = $(TARGETDIR)/SDL2main.lib
+OBJDIR = ../../Debug-windows-x86_64/SDL2main
+DEFINES += -D_WINDOWS -DWIN32 -D_DEBUG
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g -msse
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -msse -fno-stack-protector
+ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 endif
 
@@ -59,8 +63,8 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/main.o
-OBJECTS += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/SDL_windows_main.o
+OBJECTS += $(OBJDIR)/SDL_windows_main.o
 
 # Rules
 # #############################################
@@ -70,7 +74,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking CHIP8Interpreter
+	@echo Linking SDL2main
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -91,7 +95,7 @@ else
 endif
 
 clean:
-	@echo Cleaning CHIP8Interpreter
+	@echo Cleaning SDL2main
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -109,7 +113,7 @@ ifneq (,$(PCH))
 $(OBJECTS): $(GCH) | $(PCH_PLACEHOLDER)
 $(GCH): $(PCH) | prebuild
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
+	$(SILENT) $(CC) -x c-header $(ALL_CFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 $(PCH_PLACEHOLDER): $(GCH) | $(OBJDIR)
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) touch "$@"
@@ -124,9 +128,9 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/main.o: src/main.cpp
+$(OBJDIR)/SDL_windows_main.o: ../../../src/main/windows/SDL_windows_main.c
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))
