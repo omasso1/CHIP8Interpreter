@@ -1,26 +1,26 @@
 #define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <iostream>
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+#include <iostream>
+#include <vector>
+#include "Window\Window.h"
+
+void f(int*);
 
 int main(int arc, char** argv) {
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-    }
-    else {
+   //Window w("Nazwa", 30, 30);
+    Window w("Nazwa");
+    
+    int i = 0;
+    std::vector<int> a(1000);
 
-        SDL_CreateWindow(
-            "SDL2 Demo",
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            SCREEN_WIDTH, SCREEN_HEIGHT,
-            SDL_WINDOW_SHOWN
-        );
+    //arr[0] = { 10, 10, 100, 100 };
+   // while (i < 10000) {
+    //    w.draw(arr, 1);
+   // }
 
-        SDL_Delay(2000);
-    }
+
+
 
     return 0;
 }
