@@ -9,6 +9,9 @@ workspace "CHIP8Interpreter"
 
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+    filter("configurations:Debug")
+    defines {"DEBUG_MODE"}
+    filter()
 
     include "CHIP8Interpreter"
     

@@ -2,23 +2,34 @@
 
 #include <iostream>
 #include <vector>
-#include "Window\Window.h"
+#include <string>
+#include "CHIP8Interpreter\CHIP8Interpreter.h"
 
-void f(int*);
 
-int main(int arc, char** argv) {
+std::string getFilePath(int argc, char** argv) {
+    if (argc != 2)
+        throw std::runtime_error("Wrong program argument. One - Path to the ROM file");
+    return argv[1];
+}
 
-   //Window w("Nazwa", 30, 30);
-    Window w("Nazwa");
+
+
+int main(int argc, char** argv) {
+
     
-    int i = 0;
-    std::vector<int> a(1000);
+    try {
+        std::string filePath = getFilePath(argc, argv);
+        CHIP8Interpreter Interpreter(filePath);
+        Interpreter.mainLoop();
+    }
+    catch (std::runtime_error& e) {
+        std::cerr << e.what() << std::endl;
+    }
+    catch (...) {
+        std::cerr << "Some error" << std::endl;
+    }
 
-    //arr[0] = { 10, 10, 100, 100 };
-   // while (i < 10000) {
-    //    w.draw(arr, 1);
-   // }
-
+    
 
 
 

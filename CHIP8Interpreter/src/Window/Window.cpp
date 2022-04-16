@@ -19,18 +19,19 @@ Window::Window(const std::string& name, int32_t width, int32_t height)
 
 }
 
-Window::~Window()
-{
 
-}
-
-
-void Window::draw(const std::vector<SDL_Rect>& rects, int32_t count) {
+void Window::clear() {
 	SDL_SetRenderDrawColor(m_renderer.get(), 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(m_renderer.get());
+}
+
+void Window::draw(const std::vector<SDL_Rect>& rects) {
+	SDL_SetRenderDrawColor(m_renderer.get(), 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(m_renderer.get());
+	//DEBUG_INFO("Number of rects: ", rects.size());
 	SDL_SetRenderDrawColor(m_renderer.get(), 255, 255, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawRects(m_renderer.get(), rects.data(), (int)count);
-	SDL_RenderFillRects(m_renderer.get(), rects.data(), (int)count);
+	SDL_RenderDrawRects(m_renderer.get(), rects.data(), static_cast<int>(rects.size()));
+	SDL_RenderFillRects(m_renderer.get(), rects.data(), static_cast<int>(rects.size()));
 	SDL_RenderPresent(m_renderer.get());
 
 }

@@ -15,10 +15,10 @@ project "CHIP8Interpreter"
     }
 
     includedirs {
-        "${wrs.location}/CHIP8Interpreter/src",
-        "${wrs.location}/CHIP8Interpreter/vendor/SDL2/include"
+        "%{wks.location}/CHIP8Interpreter/src",
+        "%{wks.location}/CHIP8Interpreter/vendor/SDL2/include"
     }
 
     links{
-        "${wrs.location}/CHIP8Interpreter/vendor/SDL2/Binaries/Debug-windows-x86_64/SDL2"
+        "%{wks.location}/CHIP8Interpreter/vendor/SDL2/Binaries/Debug-windows-x86_64/SDL2"
     }
