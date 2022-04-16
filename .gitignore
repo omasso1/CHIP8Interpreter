@@ -410,3 +410,4 @@ FodyWeavers.xsd
 *.lib
 *.pdb
 *.exp
+[mM]akefile
