@@ -55,7 +55,8 @@ void CHIP8Interpreter::pollEvents() {
 uint16_t CHIP8Interpreter::getNextInstruction()
 {
 	//intructions are 2bytes wide
-	return (static_cast<uint16_t>(m_memory[m_program_counter++]) << 8) | static_cast<uint16_t>(m_memory[m_program_counter++]);
+	m_program_counter += 2;
+	return *reinterpret_cast<uint16_t*>(&m_memory[m_program_counter - 2]);
 }
 
 
