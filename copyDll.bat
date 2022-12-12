@@ -1,0 +1,2 @@
+copy CHIP8Interpreter\vendor\SDL2\Binaries\Debug-windows-x86_64\SDL2.dll CHIP8Interpreter\bin\Debug-windows-x86_64\CHIP8Interpreter\
+copy CHIP8Interpreter\vendor\SDL2\Binaries\Release-windows-x86_64\SDL2.dll CHIP8Interpreter\bin\Release-windows-x86_64\CHIP8Interpreter\
